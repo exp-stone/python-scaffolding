@@ -70,11 +70,13 @@ def configure_logging(
     to_file: bool = True,
     log_path: Path = LOG_PATH,
 ) -> logging.Logger:
-    logger = logging.getLogger("Starting...")
+    logger = logging.getLogger()
     logger.setLevel(level.upper())
     logger.handlers.clear()
 
-    formatter = logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s")
+    formatter = logging.Formatter(
+        "%(asctime)s %(levelname)s %(name)s %(module)s.%(funcName)s:%(lineno)d: %(message)s"
+    )
 
     if to_file:
         file_handler = logging.FileHandler(log_path, encoding="utf-8")
