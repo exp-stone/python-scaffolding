@@ -5,6 +5,8 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
+from example_worker import ExampleWorker
+
 ROOT = Path(__file__).parent
 CONFIG_PATH = ROOT / "config.json"
 LOG_PATH = ROOT / "log.txt"
@@ -97,7 +99,9 @@ def main(argv: Sequence[str] | None = None) -> None:
     config = load_config(args.config)
     log_cfg = config.get("logging", {})
     app_cfg = config.get("app", {})
-    app_name = get_cli_value(args, "app_name", app_cfg.get("name", "ptest"))
+    app_name = get_cli_value(
+        args, "app_name", app_cfg.get("name", "Python Scaffolding")
+    )
     logger = configure_logging(
         level=get_cli_value(args, "log_level", log_cfg.get("level", "INFO")),
         to_screen=get_cli_value(args, "to_screen", log_cfg.get("to_screen", False)),
@@ -105,8 +109,9 @@ def main(argv: Sequence[str] | None = None) -> None:
         log_path=args.log_file,
     )
 
-    logger.info("starting %s", app_name)
-    logger.debug("loaded config: %s", config)
+    logger.info("Starting %s", app_name)
+    logger.debug("Loaded config: %s", config)
+    ExampleWorker(logger).run()
     logger.info("Finished.")
 
 
