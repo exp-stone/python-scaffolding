@@ -1,0 +1,10 @@
+{
+  "logging": {
+    "level": "INFO",
+    "to_screen": true,
+    "to_file": true
+  },
+  "app": {
+    "name": "ptest"
+  }
+}
