@@ -2,7 +2,8 @@
   "logging": {
     "level": "INFO",
     "to_screen": true,
-    "to_file": true
+    "to_file": true,
+    "clear_on_start": true
   },
   "app": {
     "name": "ptest"

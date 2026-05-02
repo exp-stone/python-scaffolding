@@ -54,6 +54,13 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         default=None,
         help="Enable or disable file logging.",
     )
+    parser.add_argument(
+        "--clear-log",
+        dest="clear_log",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="Clear the log file when the application starts.",
+    )
     return parser.parse_args(argv)
 
 
@@ -69,6 +76,7 @@ def configure_logging(
     to_screen: bool = False,
     to_file: bool = True,
     log_path: Path = LOG_PATH,
+    clear_log: bool = True,
 ) -> logging.Logger:
     logger = logging.getLogger()
     logger.setLevel(level.upper())
@@ -79,7 +87,8 @@ def configure_logging(
     )
 
     if to_file:
-        file_handler = logging.FileHandler(log_path, encoding="utf-8")
+        file_mode = "w" if clear_log else "a"
+        file_handler = logging.FileHandler(log_path, mode=file_mode, encoding="utf-8")
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 
@@ -109,6 +118,7 @@ def main(argv: Sequence[str] | None = None) -> None:
         to_screen=get_cli_value(args, "to_screen", log_cfg.get("to_screen", False)),
         to_file=get_cli_value(args, "to_file", log_cfg.get("to_file", True)),
         log_path=args.log_file,
+        clear_log=get_cli_value(args, "clear_log", log_cfg.get("clear_on_start", True)),
     )
 
     logger.info("Starting %s", app_name)
